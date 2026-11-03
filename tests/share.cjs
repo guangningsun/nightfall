@@ -1,0 +1,12 @@
+const assert=require('node:assert/strict');
+const setup=require('../js/survivor/share');
+let listener,opened,menu,removed,paused=0,toast;
+const run={state:'menu',hero:'夜鸦',time:'15:00',kills:952,version:'0.5.3'};
+const wx={onShareAppMessage(fn){listener=fn},offShareAppMessage(fn){removed=fn},showShareMenu(v){menu=v},shareAppMessage(v){opened=v},showToast(v){toast=v}};
+const sharing=setup(wx,()=>run,()=>{if(run.state==='playing'){paused++;run.state='paused'}});
+assert.equal(menu.withShareTicket,false);sharing.share('home');assert.match(opened.title,/三位英雄/);assert.equal(opened.query,'source=home&version=0.5.3');assert.equal(opened.imageUrl,'images/survivor/forest.png');
+run.state='end';sharing.share('result');assert.match(opened.title,/夜鸦.*15:00.*952/);assert.match(opened.query,/source=result/);
+run.state='playing';const card=listener();assert.equal(paused,1);assert.equal(run.state,'paused');assert.match(card.query,/source=menu/);assert.equal(card.success,undefined);
+wx.shareAppMessage=()=>{throw Error('unavailable')};sharing.share('home');assert.match(toast.title,/暂时无法分享/);
+delete wx.shareAppMessage;sharing.share('home');assert.match(toast.title,/真机/);sharing.dispose();assert.equal(removed,listener);setup({},()=>run,()=>{}).dispose();
+console.log('PASS share menu, invitation/result cards, pause, missing API, failure and listener cleanup');

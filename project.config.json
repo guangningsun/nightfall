@@ -1,0 +1,201 @@
+{
+  "description": "暗夜幸存者 · 微信小游戏 v0.5.3",
+  "setting": {
+    "urlCheck": false,
+    "es6": true,
+    "postcss": true,
+    "minified": true,
+    "newFeature": true,
+    "uglifyFileName": false,
+    "uploadWithSourceMap": true,
+    "enhance": false,
+    "packNpmManually": false,
+    "packNpmRelationList": [],
+    "minifyWXSS": true,
+    "localPlugins": false,
+    "condition": false,
+    "compileWorklet": false,
+    "babelSetting": {
+      "ignore": [],
+      "disablePlugins": [],
+      "outputPath": ""
+    },
+    "disableUseStrict": false,
+    "minifyWXML": true,
+    "useCompilerPlugins": false
+  },
+  "compileType": "game",
+  "libVersion": "latest",
+  "appid": "wx28324f760acc47fa",
+  "projectname": "last_survivors",
+  "condition": {
+    "search": {
+      "current": -1,
+      "list": []
+    },
+    "conversation": {
+      "current": -1,
+      "list": []
+    },
+    "game": {
+      "currentL": -1,
+      "list": []
+    },
+    "miniprogram": {
+      "current": -1,
+      "list": []
+    }
+  },
+  "simulatorPluginLibVersion": {},
+  "packOptions": {
+    "ignore": [
+      {
+        "type": "folder",
+        "value": "tests"
+      },
+      {
+        "type": "file",
+        "value": "README.md"
+      },
+      {
+        "type": "folder",
+        "value": "audio"
+      },
+      {
+        "type": "folder",
+        "value": "js/base"
+      },
+      {
+        "type": "folder",
+        "value": "js/libs"
+      },
+      {
+        "type": "folder",
+        "value": "js/npc"
+      },
+      {
+        "type": "folder",
+        "value": "js/player"
+      },
+      {
+        "type": "folder",
+        "value": "js/runtime"
+      },
+      {
+        "type": "file",
+        "value": "js/main.js"
+      },
+      {
+        "type": "file",
+        "value": "js/databus.js"
+      },
+      {
+        "type": "file",
+        "value": "js/render.js"
+      },
+      {
+        "type": "file",
+        "value": ".eslintrc.js"
+      },
+      {
+        "type": "file",
+        "value": "images/explosion8.png"
+      },
+      {
+        "type": "file",
+        "value": "images/bullet.png"
+      },
+      {
+        "type": "file",
+        "value": "images/explosion9.png"
+      },
+      {
+        "type": "file",
+        "value": "images/enemy.png"
+      },
+      {
+        "type": "file",
+        "value": "images/explosion19.png"
+      },
+      {
+        "type": "file",
+        "value": "images/explosion18.png"
+      },
+      {
+        "type": "file",
+        "value": "images/hero.png"
+      },
+      {
+        "type": "file",
+        "value": "images/explosion1.png"
+      },
+      {
+        "type": "file",
+        "value": "images/explosion13.png"
+      },
+      {
+        "type": "file",
+        "value": "images/explosion12.png"
+      },
+      {
+        "type": "file",
+        "value": "images/Common.png"
+      },
+      {
+        "type": "file",
+        "value": "images/explosion2.png"
+      },
+      {
+        "type": "file",
+        "value": "images/explosion10.png"
+      },
+      {
+        "type": "file",
+        "value": "images/explosion11.png"
+      },
+      {
+        "type": "file",
+        "value": "images/explosion3.png"
+      },
+      {
+        "type": "file",
+        "value": "images/explosion7.png"
+      },
+      {
+        "type": "file",
+        "value": "images/explosion15.png"
+      },
+      {
+        "type": "file",
+        "value": "images/explosion14.png"
+      },
+      {
+        "type": "file",
+        "value": "images/explosion6.png"
+      },
+      {
+        "type": "file",
+        "value": "images/explosion4.png"
+      },
+      {
+        "type": "file",
+        "value": "images/explosion16.png"
+      },
+      {
+        "type": "file",
+        "value": "images/explosion17.png"
+      },
+      {
+        "type": "file",
+        "value": "images/bg.jpg"
+      },
+      {
+        "type": "file",
+        "value": "images/explosion5.png"
+      }
+    ],
+    "include": []
+  },
+  "isGameTourist": false,
+  "editorSetting": {}
+}
