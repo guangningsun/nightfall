@@ -1,5 +1,5 @@
 {
-  "description": "暗夜幸存者 · 微信小游戏 v0.5.3",
+  "description": "暗夜幸存者 · 微信小游戏 v0.10.3",
   "setting": {
     "urlCheck": false,
     "es6": true,
@@ -192,6 +192,22 @@
       {
         "type": "file",
         "value": "images/explosion5.png"
+      },
+      {
+        "type": "folder",
+        "value": "server"
+      },
+      {
+        "type": "folder",
+        "value": "deploy"
+      },
+      {
+        "type": "file",
+        "value": "AGENTS.md"
+      },
+      {
+        "type": "file",
+        "value": "DESIGN.md"
       }
     ],
     "include": []

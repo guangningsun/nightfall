@@ -1,0 +1,13 @@
+const assert=require('node:assert/strict'),create=require('../js/survivor/combat-feedback');
+const f=create(),frame=(hp,kills=0,id='one')=>({id,kills,enemies:Array.from({length:2000},(_,id)=>({id,hp,x:0,y:0,r:14}))});
+f.observe(frame(100),1000);assert.deepEqual(f.counts,{hits:0,numbers:0});
+f.observe(frame(75,3),1100);assert.equal(f.counts.hits,64);assert.equal(f.counts.numbers,20);assert.equal(f.hit(0,1150),true);assert.equal(f.hit(0,1250),false);
+f.observe({id:'one',kills:3,enemies:[]},1700);assert.deepEqual(f.counts,{hits:0,numbers:0});
+f.observe(frame(100,0,'new'),1800);assert.deepEqual(f.counts,{hits:0,numbers:0});
+let created=0,calls=0;const g=new Proxy({},{get:()=>()=>{}}),wx={createCanvas:()=>{created++;return {getContext:()=>g}}};
+const cache=require('../js/survivor/sprite-cache')(wx,()=>({}),4),ctx={drawImage(){calls++}};
+for(let i=0;i<2000;i++)cache.draw(ctx,0,0,0,1.25,0,1);
+assert.equal(created,1);assert.equal(calls,2000);
+for(let i=0;i<20;i++)cache.draw(ctx,i,0,0,1,0);
+assert.equal(cache.size,4);
+console.log('PASS bounded feedback, no entry/disappearance false hits, new-run reset, 2000 sprites reuse one raster, bounded cache');

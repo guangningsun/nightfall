@@ -1,0 +1,11 @@
+const assert=require('node:assert/strict'),{once}=require('node:events'),{WebSocket}=require('../server/node_modules/ws'),{createServer}=require('../server/index.cjs'),cloud=require('../js/survivor/cloud-save');
+(async()=>{const server=process.env.COOP_URL?null:createServer({port:0});if(server)await once(server.server,'listening');const store={};let profile={runs:2,wins:1,total:10,gold:500,history:[],talents:{}},backup;
+const wx={getStorageSync:k=>store[k],setStorageSync:(k,v)=>store[k]=v,connectSocket({url}){const s=new WebSocket(url);return {onOpen:f=>s.on('open',f),onMessage:f=>s.on('message',data=>f({data:String(data)})),onError:f=>s.on('error',f),onClose:f=>s.on('close',f),send:({data})=>s.send(data),close:()=>s.close()};}};
+const c=cloud(wx,{endpoint:process.env.COOP_URL||'ws://127.0.0.1:'+server.server.address().port+'/coop',read:()=>profile,restore:v=>{backup=profile;profile=v},notify(){}});
+const wait=async()=>{for(let i=0;i<100&&c.busy;i++)await new Promise(r=>setTimeout(r,20));assert.equal(c.busy,false);};
+try{c.changed();await wait();assert.equal(store['nightfall-cloud-revision'],1);assert.match(store['nightfall-coop-token'],/^[a-f0-9]{64}$/);
+profile={...profile,gold:300};c.changed();await wait();assert.equal(store['nightfall-cloud-revision'],2);
+profile={...profile,gold:0};c.sync('restore');await wait();assert.equal(profile.gold,300);assert.equal(backup.gold,0);
+c.sync();await wait();assert.equal(store['nightfall-cloud-revision'],2,'same snapshot is not credited twice');
+console.log('PASS real socket upload, auto-change upload, wallet replacement, restore and same-save dedup');
+}finally{c.dispose();if(server)await server.close();}})().catch(e=>{console.error(e);process.exitCode=1});

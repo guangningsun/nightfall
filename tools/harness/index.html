@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>暗夜幸存者 · 浏览器 Harness</title>
+<style>
+  html,body{margin:0;background:#0d0c12;color:#e9c349;font-family:monospace}
+  #stage{position:relative;width:390px;height:844px;margin:0 auto;overflow:hidden;background:#14121a}
+  #stage canvas{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated}
+  #log{font-size:11px;color:#9a8f7d;padding:6px;text-align:center;min-height:20px}
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div id="log">loading…</div>
+<script>
+// ---- minimal CommonJS loader over fetch (handles circular deps + ESM) ----
+const REG = {};
+const cache = {};
+const pending = {};
+function keyOf(url){ return new URL(url).pathname.replace(/\.c?js$/,''); }
+function resolveUrl(p, base){ return new URL(p, base).href; }
+
+// Synchronous require against already-loaded modules; for circular deps the
+// partially-filled exports object is returned (standard CommonJS semantics).
+function requireSync(p, fromUrl){
+  const k = keyOf(resolveUrl(p, fromUrl));
+  if (REG[k]) return REG[k].exports;
+  if (cache[k]) return cache[k].exports;
+  const err = new Error('module not preloaded: '+k+' (from '+p+')');
+  err.__missing = k;
+  throw err;
+}
+
+async function load(base, path){
+  const abs = resolveUrl(path, base);
+  const key = keyOf(abs);
+  if(cache[key]) return cache[key].exports;
+  if(pending[key]) return pending[key];
+  const mod = { exports:{} };
+  cache[key] = mod;
+  pending[key] = mod.exports;
+
+  const res = await fetch(abs);
+  const src = await res.text();
+  const localRequire = (p) => requireSync(p, abs);
+
+  const isEsm = /^\s*(import|export)\s/m.test(src) && !/module\.exports/.test(src);
+  if (isEsm) {
+    const body = transpileEsm(src);
+    const fn = new Function('require','module','exports', body);
+    fn(localRequire, mod, mod.exports);
+  } else {
+    const fn = new Function('require','module','exports','__dirname','__filename', src);
+    fn(localRequire, mod, mod.exports, new URL('.', abs).href, abs);
+  }
+  pending[key] = null;
+  return mod.exports;
+}
+
+// Turn ESM syntax into a CJS body. Dependencies are resolved lazily through
+// require() so the loader can await them before evaluation.
+function transpileEsm(src){
+  const deps = [];
+  const importRe = /import\s+(?:([\w$]+)\s*,\s*)?(?:\{([^}]*)\}|\*\s+as\s+([\w$]+)|([\w$]+))?\s*from\s*['"]([^'"]+)['"]/g;
+  let body = src.replace(importRe, (m, def, named, star, dflt, spec) => {
+    const i = deps.push(spec) - 1;
+    let out = `const __m${i} = require(${JSON.stringify(spec)});`;
+    // default import: CJS module.exports may be the class itself or {default:...}
+    const defExpr = `(__m${i} && __m${i}.default !== undefined ? __m${i}.default : __m${i})`;
+    if (def)   out += ` const ${def} = ${defExpr};`;
+    if (named) out += ` const {${named.replace(/\s+as\s+/g,' : ')}} = __m${i};`;
+    if (star)  out += ` const ${star} = __m${i};`;
+    if (dflt)  out += ` const ${dflt} = ${defExpr};`;
+    return out;
+  });
+  body = body.replace(/import\s*['"][^'"]+['"];?/g, '');
+  body = body.replace(/export\s+default\s+/g, 'module.exports.default = ');
+  body = body.replace(/export\s+(const|let|var|function|class)\s+([\w$]+)/g, '$1 $2');
+  body = body.replace(/export\s*\{([^}]*)\}\s*;?/g, (m, names) => {
+    names.split(',').map(s=>s.trim()).filter(Boolean).forEach(n=>{
+      const [local, exported] = n.split(/\s+as\s+/).map(s=>s.trim());
+      body += `\nmodule.exports[${JSON.stringify(exported)}] = ${local};`;
+    });
+    return '';
+  });
+  // rewrite require(spec) for collected deps to be lazy-resolved
+  deps.forEach((spec, i) => {
+    body = body.split(JSON.stringify(spec)).join(JSON.stringify(spec)); // keep as-is
+  });
+  return body;
+}
+// preload all modules we might need, in dependency-first order
+const FILES = [
+  'js/libs/tinyemitter.js',
+  'js/base/pool.js','js/base/sprite.js','js/base/animation.js',
+  'js/survivor/roles.js','js/survivor/extra-heroes.js','js/survivor/character-cards.js',
+  'js/survivor/talents.js','js/survivor/inventory.js','js/survivor/loot.js',
+  'js/survivor/button-ui.js','js/survivor/combat-feedback.js','js/survivor/sprite-cache.js',
+  'js/survivor/coop-visuals.js','js/survivor/coop-hud.js','js/survivor/reward-ui.js',
+  'js/survivor/share.js','js/survivor/ad-config.js','js/survivor/rewarded-ad.js',
+  'js/survivor/cloud-save.js','js/survivor/motion-legacy.js','js/survivor/motion.js',
+  'js/survivor/siege-scene.js','js/survivor/wire.js','js/survivor/codex.js','js/survivor/coop.js'
+];
+const BASE = new URL('../../', location.href).href.replace(/\/$/,'');
+(async ()=>{
+  // Pass 1: fetch every source into a source map.
+  const SRC = {};
+  await Promise.all(FILES.map(async f => {
+    const abs = new URL(f, BASE).href;
+    const res = await fetch(abs);
+    SRC[keyOf(abs)] = await res.text();
+  }));
+  // Pass 2: evaluate in dependency-first order using the source map.
+  const order = [
+    'js/libs/tinyemitter.js','js/base/pool.js','js/base/sprite.js','js/base/animation.js',
+    'js/survivor/extra-heroes.js','js/survivor/roles.js','js/survivor/codex.js',
+    'js/survivor/loot.js','js/survivor/talents.js','js/survivor/inventory.js',
+    'js/survivor/button-ui.js','js/survivor/combat-feedback.js','js/survivor/sprite-cache.js',
+    'js/survivor/coop-visuals.js','js/survivor/coop-hud.js','js/survivor/reward-ui.js',
+    'js/survivor/share.js','js/survivor/ad-config.js','js/survivor/rewarded-ad.js',
+    'js/survivor/cloud-save.js','js/survivor/motion-legacy.js','js/survivor/motion.js',
+    'js/survivor/siege-scene.js','js/survivor/wire.js','js/survivor/character-cards.js',
+    'js/survivor/coop.js'
+  ];
+  for (const f of order){
+    const abs = new URL(f, BASE).href;
+    const key = keyOf(abs);
+    const src = SRC[key];
+    const mod = { exports:{} };
+    cache[key] = mod; REG[key] = mod;
+    const localRequire = (p) => {
+      const k = keyOf(new URL(p, abs).href);
+      if (REG[k]) return REG[k].exports;
+      throw new Error('module not preloaded: '+k+' (from '+p+')');
+    };
+    try {
+      const isEsm = /^\s*(import|export)\s/m.test(src) && !/module\.exports/.test(src);
+      if (isEsm) {
+        const fn = new Function('require','module','exports', transpileEsm(src));
+        fn(localRequire, mod, mod.exports);
+      } else {
+        const fn = new Function('require','module','exports','__dirname','__filename', src);
+        fn(localRequire, mod, mod.exports, new URL('.', abs).href, abs);
+      }
+    } catch(e){
+      console.error('load fail', f, e.message);
+    }
+  }
+  // ---- wx API shim over real canvas ----
+  const stage = document.getElementById('stage');
+  const log = (m)=>{ document.getElementById('log').textContent = m; };
+  const W = 390, H = 844;
+  function makeCanvas(w,h){
+    const c = document.createElement('canvas');
+    c.width = w||W; c.height = h||H;
+    return c;
+  }
+  // the visible main canvas — engine will draw into this
+  const main = makeCanvas(W,H);
+  main.id = 'gamecanvas';
+  stage.appendChild(main);
+  let mainTaken = false;
+  const wx = {
+    // In WeChat, createCanvas() with no args returns a NEW offscreen canvas;
+    // the game grabs its main canvas the same way, so we hand back the visible
+    // one for the first call and offscreen buffers afterwards.
+    createCanvas: (o)=> (o && o.width) ? makeCanvas(o.width,o.height) : (mainTaken ? makeCanvas() : (mainTaken=true, main)),
+    createImage: ()=> {
+      const img = new Image();
+      return img;
+    },
+    getWindowInfo: ()=>({windowWidth:W, windowHeight:H, pixelRatio:2, safeArea:{top:44, bottom:810, left:0, right:W}}),
+    getSystemInfoSync: ()=>({windowWidth:W, windowHeight:H, pixelRatio:2, safeArea:{top:44, bottom:810}}),
+    getStorageSync: (k)=>{ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return undefined; } },
+    setStorageSync: (k,v)=>{ localStorage.setItem(k, JSON.stringify(v)); },
+    removeStorageSync: (k)=> localStorage.removeItem(k),
+    onTouchStart(){}, onTouchMove(){}, onTouchEnd(){}, onTouchCancel(){},
+    offTouchStart(){}, offTouchMove(){}, offTouchEnd(){}, offTouchCancel(){},
+    onHide(){}, onShow(){}, onWindowResize(){},
+    offHide(){}, offShow(){}, offWindowResize(){},
+    getUpdateManager(){ return {onCheckForUpdate(){}, onUpdateReady(){}, onUpdateFailed(){}}; },
+    createInnerAudioContext(){ return {play(){},stop(){},destroy(){}}; },
+    vibrateShort(){}, vibrateLong(){},
+    shareAppMessage(){},
+    onShareAppMessage(){},
+    showShareMenu(){}, hideShareMenu(){},
+    getLaunchOptionsSync: ()=>({query:{}}),
+  };
+  globalThis.wx = wx;
+  globalThis.GameGlobal = {};
+  // engine resolves asset paths relative to the page -> point them at project root
+  const ROOT = new URL('../../', location.href).href.replace(/\/$/,'');
+  const origAssign = Object.getOwnPropertyDescriptor(HTMLImageElement.prototype, 'src');
+  Object.defineProperty(HTMLImageElement.prototype, 'src', {
+    set(v){ origAssign.set.call(this, new URL(v, ROOT).href); },
+    get(){ return origAssign.get.call(this); }
+  });
+  const create = await load(BASE, 'js/survivor/engine.js');
+  const g = create(wx, {manual:true, testing:true});
+  globalThis.__g = g;
+  g.draw();
+  log('ready');
+  window.__ready = true;
+})();
+</script>
+</body>
+</html>

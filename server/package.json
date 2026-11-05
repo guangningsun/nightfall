@@ -1,0 +1,1 @@
+{"name":"nightfall-coop","version":"0.10.3","private":true,"scripts":{"start":"node index.cjs","test":"node ../tests/coop.cjs"},"dependencies":{"ws":"8.18.3"}}
