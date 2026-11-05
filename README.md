@@ -323,7 +323,8 @@ COOP_URL=wss://brilliantlife.com.cn/nightfall-coop/coop node tests/coop.cjs
 
 - 角色立绘：`images/survivor/portraits/*.jpg` 抠图去金框后转 WebP。立绘原本带装饰金框与英文名，与游戏内中文角色名不一致，因此按 `character-cards.js` 的裁切框重新取角色区域。
 - 游戏画面：`tools/harness/` 在浏览器中用真实 Canvas 模拟微信 API 运行 v0.10.0 客户端，Playwright 截取实际战斗画面，不是示意图。
-- 玩法区实机画面：竖版广告屏轮播（`.billboard`）。屏幕内含 LED 扫描线与缓慢扫光，右侧「画面节目单」列出全部条目，当前项高亮并带播放进度条；4.6 秒自动切换，悬停/聚焦暂停，滚出视口自动停转，支持左右方向键、手势滑动与圆点直选；`prefers-reduced-motion` 下不自动播放（手动切换仍可用）。圆点与节目单由 `main.js` 依据 `.bb-slide` 生成，只维护一处数据。
+- 玩法区不放截图：曾做成竖版广告屏轮播（`.billboard`，自动轮播 + 「画面节目单」），但 620px 高的屏幕把页面撑得太长、上下滚动成本高，已整体移除（HTML/CSS/JS 均已清干净）。现在整站只保留首屏 hero 的一张实机画面，玩法区是纯文字的 5 步循环 + 单人/双人对比卡。
+- `assets/shots/` 是 harness 抓图的素材库（menu / solo / mage / upgrade / crowd），页面当前只引用 `crowd.webp`；其余留作后续版块备料，用 `tools/harness/capture*.js` 可随时重新生成。
 - 微信小程序码：`site/assets/wxcode.webp`（页面实际引用）与 `site/assets/wxcode.png`（无损母版，640×640 方形裁切，页面未直接引用）。
 - 分享封面：`site/assets/og-cover.png`（1200×630），由 `site/tools/make_og_cover.py` 用真实战斗画面 + 标题排版生成；`index.html` 的 `og:image` 用绝对 URL 指向它，微信/微博爬虫才能取到。
 
