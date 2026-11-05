@@ -339,6 +339,16 @@ nginx 侧：删除 `nginx.conf` 中 `include /opt/nightfall-site/nginx-location.
 
 注意：`wx.createCanvas()` 无参调用返回的是**新建离屏画布**，不是主画布；只有带 `width` 参数时才返回指定尺寸画布。首个无参调用拿到主画布，后续为离屏缓冲。搞错这个语义会导致精灵缓存全画到主画布上。
 
+### 克隆后运行
+
+小游戏客户端无需构建，用微信开发者工具直接打开本目录即可。服务端依赖需自行安装：
+
+```sh
+npm ci --prefix server --ignore-scripts
+```
+
+仓库不包含 `node_modules`，也不包含 `server/data/`（运行时生成的玩家档案）。
+
 ### 网站数据口径
 
 站点上所有数值均对齐源码：`talents.js` 的 `cost = ceil(base*100*1.5^当前等级)`、`server/world.cjs` 的城门 4500/7500/12000 与 `gold: 500 + 本局金币`、`engine.js` 的 `eliteTimes=[120,180,300,420,600]` 与敌人上限 2000。性能数字（快照 -94%、精灵缓存 3.4ms→1.9ms）来自本地自动化测试，站点已注明不代表真机帧率。
