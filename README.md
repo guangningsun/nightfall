@@ -317,6 +317,7 @@ COOP_URL=wss://brilliantlife.com.cn/nightfall-coop/coop node tests/coop.cjs
 - 服务器目录：`/opt/nightfall-site/releases/<版本>/`，`current` 指向当前版本；`/opt/nightfall-site/nightfall` 是 URL 镜像软链
 - nginx 配置：`/opt/nightfall-site/nginx-location.conf`，由 `/etc/nginx/nginx.conf` 的 443 server 块 include
 - 资源全部本地化（WebP/JPG），无外部 CDN 依赖；index.html 不缓存，assets 缓存 7 天
+- 备案信息：页脚展示 ICP 备案号（津ICP备19009215号）并链接工信部查询地址 `https://beian.miit.gov.cn/`。境内站点按要求必须在页脚展示备案号并可点击跳转，**改动 footer 时不要删掉这行**。
 
 ### 素材来源
 
