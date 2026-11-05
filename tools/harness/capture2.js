@@ -1,9 +1,16 @@
 // Capture the remaining screens: codex, talent shop, siege, character select.
+//
+// 前置：在仓库根目录起静态服务
+//   python3 -m http.server 8899
+// 然后
+//   node tools/harness/capture2.js
 const path = require('path');
-const PW = require('/Users/sunguangning/clawd/node_modules/playwright');
+const { loadPlaywright, SITE_SHOTS, HARNESS_URL } = require('./pw');
 
-const OUT = '/Users/sunguangning/Documents/code/codex_ws/nightfall_site/assets/shots';
-const URL = 'http://127.0.0.1:8899/tools/harness/index.html';
+const PW = loadPlaywright();
+
+const OUT = process.env.SHOT_OUT || SITE_SHOTS;
+const URL = HARNESS_URL;
 
 (async () => {
   const browser = await PW.chromium.launch();

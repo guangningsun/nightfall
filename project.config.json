@@ -208,6 +208,10 @@
       {
         "type": "file",
         "value": "DESIGN.md"
+      },
+      {
+        "type": "folder",
+        "value": "site"
       }
     ],
     "include": []

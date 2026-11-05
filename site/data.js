@@ -1,0 +1,60 @@
+// 暗夜幸存者 · 官网数据
+// 所有数值均对齐 js/survivor/ 与 server/ 源码，不做营销性放大。
+window.SITE = {
+  heroes: [
+    { key:'hunter', name:'阿德里安', role:'远程输出', img:'assets/heroes/hunter.webp',
+      main:'圣银弹丸', sub:'月轮', active:'冲刺',
+      desc:'精准射击与护卫。银弹自动锁定逼近的敌人，月轮环绕清场。',
+      evol:'炼狱星陨 / 永夜月蚀', solo:true, coop:true },
+    { key:'mage', name:'瑟琳娜', role:'输出法师', img:'assets/heroes/mage.webp',
+      main:'星雷新星', sub:'冰霜结界', active:'月影闪现',
+      desc:'范围星雷与冰霜控制。闪现穿越敌群，周围敌人短暂冻结。',
+      evol:'苍穹雷域 / 绝对零度', solo:true, coop:true },
+    { key:'rogue', name:'夜鸦', role:'刺客', img:'assets/heroes/rogue.webp',
+      main:'回旋飞刃', sub:'毒刺陷阱', active:'暗影突袭',
+      desc:'穿透回旋飞刃与地面毒刺，沿行进路线布阵，主动穿阵伤敌。',
+      evol:'千鸦刃雨 / 噬魂毒沼', solo:true, coop:true },
+    { key:'tank', name:'铁壁·洛恩', role:'肉盾', img:'', placeholder:'盾',
+      main:'盾击震荡', sub:'守护', active:'嘲讽',
+      desc:'260 初始生命。主动嘲讽 4 秒并减伤，冷却 8 秒，在塔射程内优先吸引攻击。',
+      evol:'不朽塔盾', solo:false, coop:true },
+    { key:'medic', name:'晨曦·艾琳', role:'医疗', img:'', placeholder:'愈',
+      main:'圣光弹', sub:'范围回复', active:'群体治疗',
+      desc:'圣光弹与范围回复。主动群疗 45，冷却 10 秒。',
+      evol:'复苏圣器', solo:false, coop:true },
+    { key:'marcus', name:'马库斯', role:'重斧战士', img:'assets/heroes/marcus.webp',
+      main:'裂地重斧', sub:'断层冲击', active:'处决',
+      desc:'扇形重劈与直线震波，主动处决近身残血。',
+      evol:'赤王裁决 / 山脉断裂', solo:true, coop:true },
+    { key:'lira', name:'莉拉', role:'精灵游侠', img:'assets/heroes/lira.webp',
+      main:'逐风连射', sub:'荆棘箭雨', active:'后跃齐射',
+      desc:'多目标连射与定点范围箭雨，主动后跃同时齐射。',
+      evol:'穿云追星 / 翠雨天幕', solo:true, coop:true },
+    { key:'kai', name:'凯', role:'双刀剑士', img:'assets/heroes/kai.webp',
+      main:'交叉双斩', sub:'连锁剑气', active:'无双架势',
+      desc:'快速交叉近战与多目标连锁剑气，主动反击并短暂无敌。',
+      evol:'十字修罗 / 万刃连星', solo:true, coop:true },
+    { key:'elena', name:'艾莲娜', role:'驭鞭舞者', img:'assets/heroes/elena.webp',
+      main:'金蛇长鞭', sub:'束缚丝线', active:'牵引旋舞',
+      desc:'长直线鞭击与多目标减速丝线，主动牵引旋舞聚怪。',
+      evol:'九节金龙 / 命运织网', solo:true, coop:true },
+    { key:'borin', name:'博林', role:'矮人锤卫', img:'assets/heroes/borin.webp',
+      main:'蓄力战锤', sub:'反震壁垒', active:'大地震荡',
+      desc:'延迟落点重锤与近身反震，主动大地震荡击退并减速。',
+      evol:'雷铸重锤 / 不动堡垒', solo:true, coop:true }
+  ],
+
+  // js/survivor/talents.js：base 为原始价，实际价格 = base × 100 × 1.5^当前等级
+  talents: [
+    { name:'不灭之血', max:10, base:150, effect:'生命上限 +15' },
+    { name:'始祖之力', max:10, base:200, effect:'武器伤害 +8%' },
+    { name:'灵魂牵引', max:5,  base:120, effect:'拾取范围 +15' },
+    { name:'永生之泉', max:5,  base:250, effect:'每秒回复 +0.3' },
+    { name:'疾风步伐', max:5,  base:180, effect:'移动速度 +5%' },
+    { name:'磐石护甲', max:5,  base:300, effect:'接触伤害 -1，最低 1 点' },
+    { name:'远古智慧', max:8,  base:220, effect:'经验宝石收益 +5%' },
+    { name:'黄金契约', max:6,  base:280, effect:'地面金币收益 +10%' },
+    { name:'战斗狂热', max:5,  base:350, effect:'自动武器间隔 -4%' },
+    { name:'影行秘术', max:3,  base:400, effect:'主动技能冷却 -10%' }
+  ]
+};

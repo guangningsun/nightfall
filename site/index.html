@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>暗夜幸存者 · NIGHT SURVIVORS — 微信小游戏</title>
+<meta name="description" content="暗夜幸存者：血月降临的像素生存挑战。10 位英雄、10 条超武进化路线、单人白昼生存与双人三重防线攻城。原生微信小游戏，无需下载，扫码即玩。">
+<meta property="og:title" content="暗夜幸存者 · NIGHT SURVIVORS">
+<meta property="og:description" content="活到第一缕晨光。10 位英雄 · 10 条超武 · 单人与双人攻城。">
+<meta property="og:image" content="https://brilliantlife.com.cn/nightfall/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:type" content="image/png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<!-- 字体异步加载：国内访问 Google Fonts 常被阻断，样式表若渲染阻塞会导致白屏。
+     CSS 里已有 PingFang SC / SF Mono 等系统字体兜底，字体到达后再覆盖。 -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="nav" id="nav">
+  <a class="brand" href="#top">
+    <span class="brand-mark" aria-hidden="true">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square">
+        <path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3z"/>
+        <path d="M12 8v6M9 11h6"/>
+      </svg>
+    </span>
+    <span class="brand-text">暗夜幸存者<small>NIGHT SURVIVORS</small></span>
+  </a>
+  <nav class="nav-links">
+    <a href="#heroes">英雄</a>
+    <a href="#modes">玩法</a>
+    <a href="#growth">成长</a>
+    <a href="#tech">技术</a>
+    <a href="#versions">版本</a>
+  </nav>
+  <a class="nav-cta" href="#play">立即游玩</a>
+</header>
+
+<main id="top">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero">
+    <div class="hero-bg" aria-hidden="true"></div>
+    <div class="hero-inner">
+      <p class="hero-kicker"><span class="dot"></span>微信小游戏 · v0.10.0 · 原生 Canvas</p>
+      <h1 class="hero-title">暗夜<span class="hero-title-accent">幸存者</span></h1>
+      <p class="hero-sub">血月领主在 11:30 降临。<br class="br-m">你不需要战胜整片黑夜——只需要活到第一缕晨光。</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#play">
+          <span>扫码开始游戏</span>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <a class="btn btn-ghost" href="#modes">看看怎么玩</a>
+      </div>      <dl class="hero-stats">
+        <div><dt>英雄</dt><dd>10<small>位</small></dd></div>
+        <div><dt>超武进化</dt><dd>10<small>条</small></dd></div>
+        <div><dt>同屏敌人</dt><dd>2000<small>上限</small></dd></div>
+        <div><dt>单局时长</dt><dd>10<small>分钟</small></dd></div>
+      </dl>
+    </div>
+    <figure class="hero-shot">
+      <img src="assets/shots/crowd.webp" alt="血月之下，数百名铠甲敌人从四面八方包围幸存者" width="780" height="1688" loading="eager">
+      <figcaption><span class="cap-dot"></span>真实游戏画面 · 7:06 · 敌潮围困</figcaption>
+    </figure>
+  </section>
+
+  <!-- ============ 核心玩法 ============ -->
+  <section class="section" id="modes">
+    <div class="section-head">
+      <p class="eyebrow">核心循环 / CORE LOOP</p>
+      <h2>操作只有两件事，深度都在别处</h2>
+      <p class="lede">移动与一个主动技能。所有深度留给角色、升级和搭配选择——把发现留给玩家。</p>
+    </div>
+
+    <ol class="loop">
+      <li>
+        <span class="loop-num">01</span>
+        <h3>走位</h3>
+        <p>按住空白处拖动移动，武器自动索敌。双指可同时冲刺，冷却 3 秒。</p>
+      </li>
+      <li>
+        <span class="loop-num">02</span>
+        <h3>拾取与升级</h3>
+        <p>拾取经验宝石，升级三选一。每次选择都改变弹体数量、范围与特效。</p>
+      </li>
+      <li>
+        <span class="loop-num">03</span>
+        <h3>八级满配</h3>
+        <p>主武器最高 8 级，叠加专属饰品。满级才会解锁超武进化路线。</p>
+      </li>
+      <li>
+        <span class="loop-num">04</span>
+        <h3>宝箱进化</h3>
+        <p>5 分钟后宝箱 80% 概率进化，10 分钟后必定进化。配方决定最终形态。</p>
+      </li>
+      <li>
+        <span class="loop-num">05</span>
+        <h3>白昼结算</h3>
+        <p>10:00 停止刷怪，击败最终宝箱怪、领奖后结算胜利，金币进入永久钱包。</p>
+      </li>
+    </ol>
+
+    <div class="shot-strip">
+      <figure class="shot">
+        <img src="assets/shots/menu.webp" alt="主菜单：开始游戏、超武图鉴、永久技能、猎人战绩、双人远征入口" loading="lazy" width="780" height="1688">
+        <figcaption>主菜单 · 8 个入口</figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="assets/shots/solo.webp" alt="战斗画面：像素角色自动攻击，敌人成群逼近，伤害数字飘出" loading="lazy" width="780" height="1688">
+        <figcaption>自动索敌 · 伤害反馈</figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="assets/shots/mage.webp" alt="法师瑟琳娜的战斗画面，星雷与冰霜特效覆盖敌群" loading="lazy" width="780" height="1688">
+        <figcaption>法师群体爆发</figcaption>
+      </figure>
+      <figure class="shot">
+        <img src="assets/shots/upgrade.webp" alt="升级三选一面板，展示月轮护卫、夜行之躯、圣银弹丸三个选项" loading="lazy" width="780" height="1688">
+        <figcaption>升级三选一</figcaption>
+      </figure>
+    </div>
+
+    <div class="mode-split">
+      <article class="mode-card">
+        <header>
+          <span class="mode-badge">单人</span>
+          <h3>白昼生存</h3>
+          <p>离线可玩，随时开局</p>
+        </header>
+        <div class="mode-body">
+          <div class="bench-row">
+            <span class="bench-label">宝箱怪</span>
+            <div class="bench-track"><div class="bench-fill" style="width:100%"></div></div>
+            <span class="bench-val">5 场</span>
+          </div>
+          <p class="mode-note">宝箱怪固定在 02:00 / 03:00 / 05:00 / 07:00 / 10:00 出现，最后一只即领主。</p>
+          <ul class="tick-list">
+            <li>8 位英雄，通关逐个解锁</li>
+            <li>4 种局内饰品掉落，每种最高 3 级</li>
+            <li>10 项永久技能，对所有角色生效</li>
+            <li>本地云存档，可上传 / 恢复</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="mode-card mode-card-alt">
+        <header>
+          <span class="mode-badge">双人</span>
+          <h3>三重防线攻城</h3>
+          <p>组队 2 人 · 联机服务器</p>
+        </header>
+        <div class="mode-body">
+          <div class="gate-track">
+            <div class="gate" style="--hp:37.5%">
+              <span class="gate-name">外城门</span>
+              <span class="gate-hp">4500</span>
+            </div>
+            <div class="gate" style="--hp:62.5%">
+              <span class="gate-name">内城门</span>
+              <span class="gate-hp">7500</span>
+            </div>
+            <div class="gate gate-core" style="--hp:100%">
+              <span class="gate-name">核心门</span>
+              <span class="gate-hp">12000</span>
+            </div>
+          </div>
+          <p class="mode-note">每道防线两座防御塔。破门后存活队友恢复 35 生命，全队获得 25 经验；只有核心门破才发放永久奖励。</p>
+          <ul class="tick-list">
+            <li>10 位英雄，五种职业分工</li>
+            <li>服务器 20Hz 模拟、10Hz 广播统一判定</li>
+            <li>破门奖励 500 金币 + 职业永久武器</li>
+            <li>六位房间号邀请好友即刻开局</li>
+          </ul>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============ 英雄 ============ -->
+  <section class="section section-alt" id="heroes">
+    <div class="section-head">
+      <p class="eyebrow">英雄阵容 / HEROES</p>
+      <h2>十位猎人，十种活法</h2>
+      <p class="lede">每位英雄拥有独立主副武器、主动技能、专属饰品与两条超武路线。通关逐位解锁，单人与双人进度各自独立。</p>
+    </div>
+
+    <div class="hero-grid" id="heroGrid">
+      <!-- filled by JS -->
+    </div>
+
+    <p class="grid-foot">肉盾「铁壁·洛恩」与医疗「晨曦·艾琳」仅在双人攻城模式可用。</p>
+  </section>
+
+  <!-- ============ 成长 ============ -->
+  <section class="section" id="growth">
+    <div class="section-head">
+      <p class="eyebrow">局外成长 / META PROGRESSION</p>
+      <h2>赢下的每一局都留在身上</h2>
+      <p class="lede">结算金币购买永久技能，作用于所有角色。购买先写存档再扣款，存储失败自动回滚，重复结算不重复入账。价格为 <b>ceil(基础价 × 100 × 1.5<sup>当前等级</sup>)</b>。</p>
+    </div>
+
+    <div class="growth-wrap">
+      <div class="talent-table" id="talentTable">
+        <!-- filled by JS -->
+      </div>
+      <aside class="growth-aside">
+        <h3>超武进化</h3>
+        <p>主武器满 8 级 + 持有对应饰品 = 解锁一条超武路线。进化后伤害 ×3，形态彻底改变。</p>
+        <ul class="evo-list">
+          <li><b>银弹 VIII</b><span>＋</span><b>猎魔徽章</b><span>→</span><em>炼狱星陨</em></li>
+          <li><b>月轮 VIII</b><span>＋</span><b>远古磁石</b><span>→</span><em>永夜月蚀</em></li>
+          <li><b>星雷 VIII</b><span>＋</span><b>星辉水晶</b><span>→</span><em>苍穹雷域</em></li>
+          <li><b>冰霜 VIII</b><span>＋</span><b>寒冬吊坠</b><span>→</span><em>绝对零度</em></li>
+          <li><b>回旋飞刃 VIII</b><span>＋</span><b>鸦羽印记</b><span>→</span><em>千鸦刃雨</em></li>
+          <li><b>毒刺陷阱 VIII</b><span>＋</span><b>剧毒原液</b><span>→</span><em>噬魂毒沼</em></li>
+        </ul>
+        <p class="aside-foot">共 10 条路线，每位英雄 2 条。宝箱条件：05:00 后掉落宝箱 80% 进化，10:00 后必定进化。</p>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ============ 技术 ============ -->
+  <section class="section section-alt" id="tech">
+    <div class="section-head">
+      <p class="eyebrow">技术实现 / ENGINEERING</p>
+      <h2>不是套壳 WebView</h2>
+      <p class="lede">原生微信 Canvas 实现，不使用 WebView、DOM、外部 CDN 或浏览器适配器。客户端无需构建，源码即产物。</p>
+    </div>
+
+    <div class="tech-grid">
+      <article class="tech-card">
+        <svg class="tech-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+        <h3>快照裁剪</h3>
+        <p class="tech-metric">94<small>% 更小</small></p>
+        <p>新协议只同步视口附近 220 像素内的动态对象，防御建筑仍全量发送。2000 敌人场景下快照从 112 KB 降到 6.9 KB。</p>
+      </article>
+      <article class="tech-card">
+        <svg class="tech-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg>
+        <h3>服务端权威</h3>
+        <p class="tech-metric">20<small>Hz 模拟</small></p>
+        <p>伤害、碰撞、经验与奖励全部由服务器判定。客户端只发送操作，永不提交伤害或金币。</p>
+      </article>
+      <article class="tech-card">
+        <svg class="tech-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z"/></svg>
+        <h3>精灵缓存</h3>
+        <p class="tech-metric">1.9<small>ms</small></p>
+        <p>预缩放、预翻转、受击着色统一缓存，命中缓存后每只精灵只需一次 drawImage。2000 次绘制的单次中位耗时从 3.4 ms 降到 1.9 ms。</p>
+      </article>
+      <article class="tech-card">
+        <svg class="tech-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l8 4.5v9L12 21l-8-4.5v-9L12 3z"/><path d="M12 12l8-4.5M12 12v9M12 12L4 7.5"/></svg>
+        <h3>零构建发布</h3>
+        <p class="tech-metric">0<small>依赖</small></p>
+        <p>不需要 npm install、不需要构建步骤。微信开发者工具直接编译源码，服务端复用既有 Node v20，不全局安装依赖。</p>
+      </article>
+    </div>
+
+    <div class="tech-note">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9L1.8 18a2 2 0 001.7 3h17a2 2 0 001.7-3L13.7 3.9a2 2 0 00-3.4 0z"/></svg>
+      <p><b>诚实说明：</b>以上数据来自本地自动化测试与服务器只读巡检，<b>不代表真机帧率</b>。iOS / Android 真机帧率、长时间发热与真实折叠设备表现仍待验证。</p>
+    </div>
+  </section>
+
+  <!-- ============ 版本 ============ -->
+  <section class="section" id="versions">
+    <div class="section-head">
+      <p class="eyebrow">迭代历程 / CHANGELOG</p>
+      <h2>从网页原型到原生小游戏</h2>
+      <p class="lede">v0.4.3 网页原型 → v0.10.0 原生微信小游戏。每次发布同步更新引擎版本、工程描述与版本测试。</p>
+    </div>
+
+    <ol class="timeline">
+      <li>
+        <span class="tl-tag">v0.4.3</span>
+        <div>
+          <h3>网页原型</h3>
+          <p>三位英雄、15 分钟生存、网页 localStorage 战绩。三职业与超武进化体系在此定型。</p>
+        </div>
+      </li>
+      <li>
+        <span class="tl-tag">v0.6.0</span>
+        <div>
+          <h3>双人远征试验版</h3>
+          <p>接入独立联机服务器，20Hz 模拟 / 10Hz 广播。无微信登录、排行榜、广告或支付依赖。</p>
+        </div>
+      </li>
+      <li>
+        <span class="tl-tag">v0.7.0</span>
+        <div>
+          <h3>主城攻城与五职业</h3>
+          <p>城门集结大厅组队，攻破城门发放永久奖励。新增肉盾与医疗，职业分工成型。</p>
+        </div>
+      </li>
+      <li>
+        <span class="tl-tag">v0.8.0</span>
+        <div>
+          <h3>三重防线与协议 2</h3>
+          <p>外城 / 内城 / 核心逐层推进。新客户端协商 protocol 2，视野裁剪把快照压缩 94%。</p>
+        </div>
+      </li>
+      <li>
+        <span class="tl-tag">v0.9.0</span>
+        <div>
+          <h3>五位新英雄</h3>
+          <p>重斧战士、精灵游侠、双刀剑士、驭鞭舞者、矮人锤卫。单人 8 位、联机 10 位。</p>
+        </div>
+      </li>
+      <li class="tl-current">
+        <span class="tl-tag">v0.10.0</span>
+        <div>
+          <h3>个人云存档 <span class="tl-now">当前</span></h3>
+          <p>上传 / 恢复 / 恢复码找回。服务端带 revision 乐观锁，冲突停止覆盖而非累加金币。</p>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <!-- ============ CTA ============ -->
+  <section class="cta" id="play">
+    <div class="cta-inner">
+      <p class="eyebrow">开始游戏 / GET STARTED</p>
+      <h2>今夜，血月将至</h2>
+      <p>用微信扫描小程序码即可进入游戏，无需下载、无需注册。<br class="br-m">双人远征需要两名玩家同时在线，通过六位房间号加入。</p>
+      <div class="cta-actions">
+        <div class="cta-links">
+          <a class="btn btn-ghost" href="https://brilliantlife.com.cn/nightfall-coop/health" target="_blank" rel="noopener">
+            <span>联机服务状态</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><path d="M15 3h6v6M10 14L21 3"/></svg>
+          </a>
+          <p class="cta-note">双人远征需要两名玩家同时在线，通过六位房间号加入。</p>
+        </div>
+        <div class="qr-box">
+          <div class="qr-frame">
+            <img src="assets/wxcode.webp" alt="暗夜幸存者微信小程序码，扫码即可进入游戏" width="640" height="640" loading="lazy">
+          </div>
+          <p class="qr-cap">微信扫码进入小游戏</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div>
+      <p class="footer-brand">暗夜幸存者 <span>NIGHT SURVIVORS</span></p>
+      <p class="footer-line">暗夜远征 · 生存挑战 · 微信小游戏 v0.10.0</p>
+    </div>
+    <div class="footer-meta">
+      <p>原生微信 Canvas 实现 · 无 WebView / 游戏素材零外链</p>
+      <p>本页面所有游戏画面均由 v0.10.0 客户端实时截取</p>
+    </div>
+  </div>
+</footer>
+
+<script src="data.js"></script>
+<script src="main.js"></script>
+</body>
+</html>

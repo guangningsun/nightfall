@@ -313,7 +313,7 @@ COOP_URL=wss://brilliantlife.com.cn/nightfall-coop/coop node tests/coop.cjs
 独立静态站点，不属于小游戏打包产物，也不覆盖服务器 9999 网页版。
 
 - 线上地址：https://brilliantlife.com.cn/nightfall/
-- 本地源码：`/Users/sunguangning/Documents/code/codex_ws/nightfall_site/`（index.html / style.css / data.js / main.js / assets）
+- 本地源码：仓库内 `site/`（index.html / style.css / data.js / main.js / assets），纯静态，无构建步骤
 - 服务器目录：`/opt/nightfall-site/releases/<版本>/`，`current` 指向当前版本；`/opt/nightfall-site/nightfall` 是 URL 镜像软链
 - nginx 配置：`/opt/nightfall-site/nginx-location.conf`，由 `/etc/nginx/nginx.conf` 的 443 server 块 include
 - 资源全部本地化（WebP/JPG），无外部 CDN 依赖；index.html 不缓存，assets 缓存 7 天
@@ -322,20 +322,48 @@ COOP_URL=wss://brilliantlife.com.cn/nightfall-coop/coop node tests/coop.cjs
 
 - 角色立绘：`images/survivor/portraits/*.jpg` 抠图去金框后转 WebP。立绘原本带装饰金框与英文名，与游戏内中文角色名不一致，因此按 `character-cards.js` 的裁切框重新取角色区域。
 - 游戏画面：`tools/harness/` 在浏览器中用真实 Canvas 模拟微信 API 运行 v0.10.0 客户端，Playwright 截取实际战斗画面，不是示意图。
+- 微信小程序码：`site/assets/wxcode.webp`（页面实际引用）与 `site/assets/wxcode.png`（无损母版，640×640 方形裁切，页面未直接引用）。
+- 分享封面：`site/assets/og-cover.png`（1200×630），由 `site/tools/make_og_cover.py` 用真实战斗画面 + 标题排版生成；`index.html` 的 `og:image` 用绝对 URL 指向它，微信/微博爬虫才能取到。
+
+### 字体加载
+
+页面用 Google Fonts（Outfit / JetBrains Mono）做拉丁字形，中文与等宽都有系统字体兜底。样式表以 `media="print" onload="this.media='all'"` 方式异步加载——国内访问 Google Fonts 常被阻断，若按普通 `rel="stylesheet"` 加载会渲染阻塞导致白屏。
+
+### 本地预览与 QA
+
+```sh
+# 任意静态服务器指向仓库根目录即可预览
+python3 -m http.server 8900 --directory site
+# 打开 http://127.0.0.1:8900/
+
+# 双端截图 + 横向溢出 / JS 错误 / 破图检查
+npm i playwright && npx playwright install chromium
+node site/tools/check-site.cjs
+```
+
+`site/tools/check-site.cjs` 会自己起一个静态服务（端口可用 `SITE_PORT` 覆盖），截图输出到 `site/.shots/`（已 gitignore），有横向溢出、JS 报错、资源 404 或破图时以非 0 退出码结束。
 
 ### 发布流程
 
-1. 打包本地站点（排除 `.DS_Store`、`._*`），解压到 `/opt/nightfall-site/releases/<新版本>/`，权限 644/755。
+1. 从仓库 `site/` 打包（排除 `.DS_Store`、`._*`），解压到 `/opt/nightfall-site/releases/<新版本>/`，权限 644/755。
 2. `ln -sfn` 把 `current` 指向新版本。
 3. `nginx -t` 通过后 `nginx -s reload`。index.html 走 no-cache，发布后立即生效。
 
-### 回滚
-
-nginx 侧：删除 `nginx.conf` 中 `include /opt/nightfall-site/nginx-location.conf;` 一行，`nginx -t` 后 reload。站点侧：`ln -sfn` 把 `current` 指回旧 release 目录即可。
+回滚：nginx 侧删除 `nginx.conf` 中 `include /opt/nightfall-site/nginx-location.conf;` 一行，`nginx -t` 后 reload；站点侧 `ln -sfn` 把 `current` 指回旧 release 目录即可。
 
 ### 浏览器 harness
 
 `tools/harness/index.html` 用 fetch 实现了一个最小 CommonJS 加载器（含 ESM 转译与循环依赖处理），并以真实 Canvas 模拟 `wx` API，使小游戏能在浏览器中直接运行。`tools/harness/capture.js`、`capture2.js` 用 Playwright 批量截图。
+
+运行方式（仓库根目录起静态服务后执行）：
+
+```sh
+python3 -m http.server 8899     # 另一个终端
+node tools/harness/capture.js    # 主流程截图
+node tools/harness/capture2.js   # 图鉴 / 天赋 / 攻城 / 英雄选择
+```
+
+截图默认输出到 `site/.shots/`（已 gitignore），需要放进官网的挑好后拷到 `site/assets/shots/`。playwright 模块按 `PLAYWRIGHT_PATH` 环境变量 → 本地 `node_modules` → 仓库 `node_modules` 顺序查找。
 
 注意：`wx.createCanvas()` 无参调用返回的是**新建离屏画布**，不是主画布；只有带 `width` 参数时才返回指定尺寸画布。首个无参调用拿到主画布，后续为离屏缓冲。搞错这个语义会导致精灵缓存全画到主画布上。
 
